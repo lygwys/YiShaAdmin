@@ -1,0 +1,116 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">TestTitle<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="testTitle" col="TestTitle" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">TestTag<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="testTag" col="TestTag" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">TestAuthor<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="testAuthor" col="TestAuthor" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">TestDate<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="testDate" col="TestDate" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">ProvinceId<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="provinceId" col="ProvinceId" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">CountyId<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="countyId" col="CountyId" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">TestContent<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="testContent" col="TestContent" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">ThumbImage<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="thumbImage" col="ThumbImage" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">TestSort<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="testSort" col="TestSort" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">TestType<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="testType" col="TestType" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">CityId<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="cityId" col="CityId" type="text" class="form-control" />
+            </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = ys.request("id");
+    $(function () {
+        getForm();
+
+        $('#form').validate({
+            rules: {
+                testTitle: { required: true }
+            }
+        });
+    });
+
+    function getForm() {
+        if (id > 0) {
+            ys.ajax({
+                url: '@Url.Content("~/WysManage/WysTest/GetFormJson")' + '?id=' + id,
+                type: 'get',
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        $('#form').setWebControls(obj.Data);
+                    }
+                }
+            });
+        }
+        else {
+            var defaultData = {};
+            $('#form').setWebControls(defaultData);
+        }
+    }
+
+    function saveForm(index) {
+        if ($('#form').validate().form()) {
+            var postData = $('#form').getWebControls({ Id: id });
+            ys.ajax({
+                url: '@Url.Content("~/WysManage/WysTest/SaveFormJson")',
+                type: 'post',
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        ys.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        ys.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>
+
