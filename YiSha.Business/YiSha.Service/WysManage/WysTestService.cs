@@ -71,6 +71,15 @@ namespace YiSha.Service.WysManage
             var expression = LinqExtensions.True<WysTestEntity>();
             if (param != null)
             {
+                if (!string.IsNullOrEmpty(param.TestTitle))
+                {
+                    expression = expression.And(t => t.TestTitle.Contains(param.TestTitle));
+                }
+                //if (!string.IsNullOrEmpty(param.PositionIds))
+                //{
+                //    long[] positionIdArr = CommonHelper.SplitToArray<long>(param.PositionIds, ',');
+                //    expression = expression.And(t => positionIdArr.Contains(t.Id.Value));
+                //}
             }
             return expression;
         }
